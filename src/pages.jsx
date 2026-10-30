@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Art, Modal, useTitle } from "./ui.jsx";
+import { ART } from "./art.js";
 import { CONFIG, PROJECTS, PAPERS, BOARDS } from "./content.js";
 
 /* ---------------- HOME ---------------- */
@@ -66,26 +67,39 @@ export function Projects() {
 }
 
 /* ---------------- ANIMATION ---------------- */
+function Paper({ p, i, onOpen }) {
+  const v = useRef(null);
+  const a = ART[p.id];
+  const play = () => v.current?.play();
+  const stop = () => { if (v.current) { v.current.pause(); v.current.currentTime = 0; } };
+  return (
+    <button className="paper" style={{ "--tilt": `${(i - 2) * 2}deg` }}
+      onMouseEnter={play} onMouseLeave={stop} onFocus={play} onBlur={stop} onClick={() => onOpen(p)}>
+      {a.video
+        ? <div className="art"><video ref={v} src={a.video} muted loop playsInline preload="metadata" /></div>
+        : <Art id={p.id} />}
+      <span>{p.title}</span>
+    </button>
+  );
+}
+
 export function Animation() {
   useTitle("Animation");
-  const [up, setUp] = useState(null);
+  const [sel, setSel] = useState(null);
   return (
     <main className="wrap">
       <h1>Animation</h1>
-      <p className="lead">Old projects, kept in a drawer. Pull a paper to see it move.</p>
+      <p className="lead">Old projects, kept in a drawer. Hover a paper to see it move, click for the full piece.</p>
       <div className="drawer-scene">
         <Art id="animBg" className="fill" />
         <div className="papers">
-          {PAPERS.map((p, i) => (
-            <button key={p.id} className={"paper" + (up === i ? " up" : "")} style={{ "--tilt": `${(i - 2) * 2}deg` }}
-              onClick={() => setUp(up === i ? null : i)}>
-              <Art id={p.id} />
-              <span>{p.title}</span>
-            </button>
-          ))}
+          {PAPERS.map((p, i) => <Paper key={p.id} p={p} i={i} onOpen={setSel} />)}
         </div>
         <Art id="drawerFront" className="front" />
       </div>
+      <Modal open={!!sel} onClose={() => setSel(null)} title={sel?.title} wide>
+        {sel && ART[sel.id].video && <video src={ART[sel.id].video} autoPlay controls playsInline />}
+      </Modal>
     </main>
   );
 }
@@ -138,8 +152,6 @@ export function Contact() {
       <h1 className="sr">Contact</h1>
       <div className="door">
         <Art id="door" className="fill" />
-        <Art id="openSign" className="open-sign" />
-        {CONFIG.openToWork && <p className="note">OPEN to work</p>}
       </div>
       <div className="plaque">
         <h2>Knock knock</h2>

@@ -7,6 +7,13 @@
 const hue = (i, n) => `hsl(${Math.round((i * 360) / n)} 45% 42%)`;
 
 export const ART = {
+  // MENÚ (cartells de dalt)
+  navHome:      { color: "#8c1d2c", label: "Home" },
+  navProjects:  { color: "#2b5d9b", label: "Projects" },
+  navAnimation: { color: "#4f8a4b", label: "Animation" },
+  navRig:       { color: "#c46b2d", label: "Rig & Tools" },
+  navAbout:     { color: "#7b4d8f", label: "About" },
+  navContact:   { color: "#4c8c8a", label: "Contact" },
   // HOME
   homeBg:    { color: "#3b2a4a", label: "Theatre back wall" },
   homeAnim:  { color: "#2f6f73", label: "Autoplay animation (best work)", video: "" },
@@ -18,7 +25,7 @@ export const ART = {
   posterMail:     { color: "#b5483a", label: "Gmail poster" },
   posterCv:       { color: "#4f8a4b", label: "CV poster" },
   // PROJECTS
-  ...Object.fromEntries(Array.from({ length: 8 }, (_, i) => [`puppet${i + 1}`, { color: hue(i, 8), label: `Puppet ${i + 1}` }])),
+  ...Object.fromEntries(Array.from({ length: 6 }, (_, i) => [`puppet${i + 1}`, { color: hue(i, 6), label: `Puppet ${i + 1}` }])),
   // ANIMATION
   animBg:      { color: "#5a3d28", label: "Open drawer (back)" },
   drawerFront: { color: "#7d5233", label: "Drawer front" },
@@ -37,6 +44,5 @@ export const ART = {
   aboutExp:       { color: "#a3a33a", label: "Experience poster" },
   aboutSkills:    { color: "#b0507a", label: "Skills poster" },
   // CONTACT
-  door:     { color: "#5b3a24", label: "Workshop door" },
-  openSign: { color: "#c0392b", label: "OPEN sign" },
+  door:     { color: "#5b3a24", label: "Workshop door (amb cartell OPEN to work dibuixat)" },
 };

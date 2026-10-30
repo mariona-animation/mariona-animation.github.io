@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { NavLink, Routes, Route, Link, useLocation } from "react-router-dom";
 import { NAV } from "./content.js";
+import { Art } from "./ui.jsx";
 import { Home, Projects, Animation, RigTools, About, Contact } from "./pages.jsx";
 
 function ScrollTop() {
@@ -17,7 +18,12 @@ export default function App() {
       <header className="bar">
         <Link to="/" className="brand">Mariona Molera</Link>
         <nav aria-label="Main">
-          {NAV.map((n) => <NavLink key={n.to} to={n.to} end>{n.label}</NavLink>)}
+          {NAV.map((n) => (
+            <NavLink key={n.to} to={n.to} end className="sign">
+              <Art id={n.art} />
+              <span className="sr">{n.label}</span>
+            </NavLink>
+          ))}
         </nav>
       </header>
       <div id="main">

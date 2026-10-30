@@ -13,7 +13,7 @@ export function Art({ id, className = "", style, children }) {
   );
 }
 
-export function Modal({ open, onClose, title, children }) {
+export function Modal({ open, onClose, title, wide, children }) {
   const ref = useRef(null);
   useEffect(() => {
     const d = ref.current;
@@ -21,7 +21,7 @@ export function Modal({ open, onClose, title, children }) {
     if (!open && d.open) d.close();
   }, [open]);
   return (
-    <dialog ref={ref} onClose={onClose} onClick={(e) => e.target === ref.current && onClose()}>
+    <dialog className={wide ? "wide" : ""} ref={ref} onClose={onClose} onClick={(e) => e.target === ref.current && onClose()}>
       <article>
         <h2>{title}</h2>
         {children}
