@@ -23,7 +23,7 @@ export const PROJECTS = Array.from({ length: 6 }, (_, i) => ({
 }));
 
 export const PAPERS = Array.from({ length: 5 }, (_, i) => ({
-  id: `paper${i + 1}`,
+  id: `anim${i + 1}`,
   title: `Personal piece ${i + 1}`,
 }));
 
