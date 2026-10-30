@@ -1,48 +1,75 @@
 // ============================================================
-//  Tots els dibuixos de la web. Cada entrada és un placeholder
-//  de color sòlid. Quan tinguis el PNG, copia'l a public/assets
-//  i escriu el camí a `src`, p. ex.  src: "/assets/curtain-left.png"
-//  Per a vídeos (MP4/WebM) fes servir `video` en comptes de `src`.
+//  Tots els dibuixos de la web. Cada entrada és un placeholder.
+//  Quan tinguis el fitxer, copia'l a public/assets i escriu el camí:
+//     src: "/assets/curtainL.png"      (imatge)
+//     video: "/assets/homeAnim.mp4"    (vídeo)
+//  `pos`  = posició dins l'escena 16:9, en % (x, y, ample, alt) + z (capa).
+//  `ref`  = només informatiu (la posició la gestiona el CSS).
+//  Aquestes mateixes xifres són a l'Excel (dibuixos_web.xlsx).
+//  ghost  = capa transparent: el placeholder només es veu com un contorn.
+//  same   = reutilitza el dibuix d'una altra entrada (flip = en mirall).
 // ============================================================
-const hue = (i, n) => `hsl(${Math.round((i * 360) / n)} 45% 42%)`;
-
 export const ART = {
-  // MENÚ (cartells de dalt)
-  navHome:      { color: "#8c1d2c", label: "Home" },
-  navProjects:  { color: "#2b5d9b", label: "Projects" },
-  navAnimation: { color: "#4f8a4b", label: "Animation" },
-  navRig:       { color: "#c46b2d", label: "Rig & Tools" },
-  navAbout:     { color: "#7b4d8f", label: "About" },
-  navContact:   { color: "#4c8c8a", label: "Contact" },
-  // HOME
-  homeBg:    { color: "#3b2a4a", label: "Theatre back wall" },
-  homeAnim:  { color: "#2f6f73", label: "Autoplay animation (best work)", video: "" },
-  curtainL:  { color: "#8c1d2c", label: "Curtain left" },
-  curtainR:  { color: "#a8323f", label: "Curtain right" },
-  floor:     { color: "#6b4426", label: "Stage floor" },
-  lever:     { color: "#d4a017", label: "Lever" },
-  posterLinkedin: { color: "#2b5d9b", label: "LinkedIn poster" },
-  posterMail:     { color: "#b5483a", label: "Gmail poster" },
-  posterCv:       { color: "#4f8a4b", label: "CV poster" },
-  // PROJECTS
-  ...Object.fromEntries(Array.from({ length: 6 }, (_, i) => [`puppet${i + 1}`, { color: hue(i, 6), label: `Puppet ${i + 1}` }])),
-  // ANIMATION
-  animBg:      { color: "#5a3d28", label: "Open drawer (back)" },
-  drawerFront: { color: "#7d5233", label: "Drawer front" },
-  ...Object.fromEntries(Array.from({ length: 5 }, (_, i) => [`paper${i + 1}`, { color: hue(i + 0.5, 5), label: `Paper ${i + 1}`, video: "" }])),
-  // RIG & TOOLS
-  workshopBg:  { color: "#44505a", label: "Workshop wall" },
-  boardRigs:   { color: "#27403a", label: "Chalkboard: Rigs" },
-  boardTools:  { color: "#3a3a5c", label: "Chalkboard: Anim Tools" },
-  tools:       { color: "#c46b2d", label: "Tools" },
-  parts:       { color: "#7a8f3c", label: "Parts" },
-  blueprints:  { color: "#2d6ca3", label: "Blueprints" },
-  // ABOUT
-  aboutPuppeteer: { color: "#7b4d8f", label: "Mariona as puppeteer (workshop)" },
-  aboutPhoto:     { color: "#c9774d", label: "Photo poster" },
-  aboutBio:       { color: "#4c8c8a", label: "Bio poster" },
-  aboutExp:       { color: "#a3a33a", label: "Experience poster" },
-  aboutSkills:    { color: "#b0507a", label: "Skills poster" },
-  // CONTACT
-  door:     { color: "#5b3a24", label: "Workshop door (amb cartell OPEN to work dibuixat)" },
+  frame: { color: "#888", label: "Marc de fusta de tota la web (centre transparent)", src: "", ghost: true, ref: { x: 0, y: 0, w: 100, h: 100, z: 90 } },
+  fxParticles: { color: "#888", label: "Partícules / pols en suspensió (vídeo en bucle)", video: "", ghost: true, opacity: 0.7, blend: "screen", ref: { x: 0, y: 0, w: 100, h: 100, z: 100 } },
+  fxGrain: { color: "#888", label: "Gra de pel·lícula (vídeo/imatge en bucle)", video: "", ghost: true, opacity: 0.18, blend: "overlay", ref: { x: 0, y: 0, w: 100, h: 100, z: 101 } },
+  fxVignette: { color: "#888", label: "Vinyeta cinematogràfica (cantonades fosques)", src: "", ghost: true, ref: { x: 0, y: 0, w: 100, h: 100, z: 102 } },
+  posterLinkedin: { color: "#2b5d9b", label: "Pòster LinkedIn (penjat al marc, part inferior)", src: "", ref: { x: 5, y: 80.2, w: 7.5, h: 17.8, z: 80 } },
+  posterMail: { color: "#b5483a", label: "Pòster Gmail / correu (penjat al marc, part inferior)", src: "", ref: { x: 13, y: 80.2, w: 7.5, h: 17.8, z: 81 } },
+  posterCv: { color: "#4f8a4b", label: "Pòster CV (penjat al marc, part inferior)", src: "", ref: { x: 21, y: 80.2, w: 7.5, h: 17.8, z: 82 } },
+  navHome: { color: "#8c1d2c", label: "Cartell de menú «Home» (penja amb cordills del marc de dalt)", src: "", ref: { x: 23.6, y: 0, w: 7.8, h: 5.6, z: 30 } },
+  navProjects: { color: "#2b5d9b", label: "Cartell de menú «Projects» (penja amb cordills del marc de dalt)", src: "", ref: { x: 32.6, y: 0, w: 7.8, h: 5.6, z: 31 } },
+  navAnimation: { color: "#4f8a4b", label: "Cartell de menú «Animation» (penja amb cordills del marc de dalt)", src: "", ref: { x: 41.6, y: 0, w: 7.8, h: 5.6, z: 32 } },
+  navRig: { color: "#c46b2d", label: "Cartell de menú «Rig & Tools» (penja amb cordills del marc de dalt)", src: "", ref: { x: 50.6, y: 0, w: 7.8, h: 5.6, z: 33 } },
+  navAbout: { color: "#7b4d8f", label: "Cartell de menú «About» (penja amb cordills del marc de dalt)", src: "", ref: { x: 59.6, y: 0, w: 7.8, h: 5.6, z: 34 } },
+  navContact: { color: "#4c8c8a", label: "Cartell de menú «Contact» (penja amb cordills del marc de dalt)", src: "", ref: { x: 68.6, y: 0, w: 7.8, h: 5.6, z: 35 } },
+  stageBg: { color: "#3b2a4a", label: "Escenari buit: paret del fons + terra de fusta en perspectiva", src: "", pos: { x: 0, y: 0, w: 100, h: 100, z: 1 } },
+  garlandBack: { color: "#c46b2d", label: "Garlandes / banderins del fons de l'escenari", src: "", pos: { x: 0, y: 0, w: 100, h: 20, z: 2 } },
+  homeAnim: { color: "#2f6f73", label: "Animació autoplay del fons (my best work)", video: "", pos: { x: 26, y: 24, w: 48, h: 48, z: 3 } },
+  reelRopes: { color: "#5b3a24", label: "Cordes del cartell de la showreel", src: "", pos: { x: 25, y: -8.2, w: 50, h: 22.2, z: 4 } },
+  reelBoard: { color: "#6b4426", label: "Cartell de fusta de la showreel (amb finestra transparent pel vídeo)", src: "", pos: { x: 25, y: 14, w: 50, h: 55.6, z: 5 } },
+  lightIdle: { color: "#888", label: "Il·luminació apagada: ambient fosc i fred amb vinyeta", src: "", ghost: true, pos: { x: 0, y: 0, w: 100, h: 100, z: 6 } },
+  lampsOff: { color: "#444444", label: "Focus de llum APAGATS (2 projectors penjats a dalt)", src: "", pos: { x: 0, y: 0, w: 100, h: 18, z: 7 } },
+  lampsOn: { color: "#d4a017", label: "Focus de llum ENCESOS (mateixa posició que lampsOff)", src: "", pos: { x: 0, y: 0, w: 100, h: 18, z: 8 } },
+  beamL: { color: "#888", label: "Feix de llum esquerre (con de llum cap al centre)", src: "", ghost: true, opacity: 0.7, blend: "screen", pos: { x: 14, y: 8, w: 34, h: 72, z: 9 } },
+  beamR: { same: "beamL", flip: true, ghost: true, opacity: 0.7, blend: "screen", pos: { x: 52, y: 8, w: 34, h: 72, z: 10 } },
+  lightLit: { color: "#888", label: "Llum càlida de l'escenari encès (taques de llum, ambient)", src: "", ghost: true, blend: "screen", pos: { x: 0, y: 0, w: 100, h: 100, z: 11 } },
+  curtainL: { color: "#8c1d2c", label: "Cortina esquerra", src: "", pos: { x: 0, y: 0, w: 24, h: 100, z: 12 } },
+  curtainR: { same: "curtainL", flip: true, pos: { x: 76, y: 0, w: 24, h: 100, z: 13 } },
+  valance: { color: "#a8323f", label: "Pelmet / cortineta superior (cobreix el cap de les cortines)", src: "", pos: { x: 0, y: 0, w: 100, h: 13, z: 14 } },
+  proscenium: { color: "#888", label: "Arc / marc de fusta de l'escenari (decoració exterior)", src: "", ghost: true, pos: { x: 0, y: 0, w: 100, h: 100, z: 15 } },
+  garlandFront: { color: "#d4a017", label: "Garlanda de bombetes de davant (penja per sobre de les cortines)", src: "", pos: { x: 0, y: 10, w: 100, h: 14, z: 16 } },
+  garlandGlow: { color: "#888", label: "Garlanda amb bombetes ENCESES (només el resplendor, mateixa posició)", src: "", ghost: true, blend: "screen", pos: { x: 0, y: 10, w: 100, h: 14, z: 17 } },
+  lever: { color: "#d4a017", label: "Palanca (llarga; la part baixa passa per sota de la màquina)", src: "", pos: { x: 79.4, y: 15, w: 4.2, h: 50, z: 18 } },
+  machineBody: { color: "#c46b2d", label: "Màquina «SHOWREEL» (cartell dibuixat al cos, a sota la palanca)", src: "", pos: { x: 69, y: 55, w: 25, h: 43, z: 19 } },
+  machineGlow: { color: "#888", label: "Màquina encesa (llums/bombetes de la màquina, mateixa posició)", src: "", ghost: true, blend: "screen", pos: { x: 69, y: 55, w: 25, h: 43, z: 20 } },
+  projectsBg: { color: "#4a3322", label: "Armari buit amb 6 compartiments (graella 3×2)", src: "", pos: { x: 0, y: 0, w: 100, h: 100, z: 1 } },
+  puppet1: { color: "hsl(0 45% 42%)", label: "Marioneta 1 en repòs dins el compartiment (a partir d'un CH del projecte)", src: "", pos: { x: 14, y: 10, w: 23, h: 38.5, z: 2 } },
+  puppet2: { color: "hsl(60 45% 42%)", label: "Marioneta 2 en repòs dins el compartiment (a partir d'un CH del projecte)", src: "", pos: { x: 38.5, y: 10, w: 23, h: 38.5, z: 2 } },
+  puppet3: { color: "hsl(120 45% 42%)", label: "Marioneta 3 en repòs dins el compartiment (a partir d'un CH del projecte)", src: "", pos: { x: 63, y: 10, w: 23, h: 38.5, z: 2 } },
+  puppet4: { color: "hsl(180 45% 42%)", label: "Marioneta 4 en repòs dins el compartiment (a partir d'un CH del projecte)", src: "", pos: { x: 14, y: 51.5, w: 23, h: 38.5, z: 2 } },
+  puppet5: { color: "hsl(240 45% 42%)", label: "Marioneta 5 en repòs dins el compartiment (a partir d'un CH del projecte)", src: "", pos: { x: 38.5, y: 51.5, w: 23, h: 38.5, z: 2 } },
+  puppet6: { color: "hsl(300 45% 42%)", label: "Marioneta 6 en repòs dins el compartiment (a partir d'un CH del projecte)", src: "", pos: { x: 63, y: 51.5, w: 23, h: 38.5, z: 2 } },
+  drawerBg: { color: "#5a3d28", label: "Calaix obert: interior i fons de l'armari (en perspectiva)", src: "", pos: { x: 0, y: 0, w: 100, h: 100, z: 1 } },
+  file1: { color: "hsl(36 45% 42%)", label: "Fitxer antic 1 (rectangle horitzontal 16:9 amb solapa de nom a dalt-esquerra)", src: "", pos: { x: 30, y: 6, w: 40, h: 44, z: 2 } },
+  file2: { color: "hsl(108 45% 42%)", label: "Fitxer antic 2 (rectangle horitzontal 16:9 amb solapa de nom a dalt-esquerra)", src: "", pos: { x: 29, y: 12, w: 42, h: 46, z: 3 } },
+  file3: { color: "hsl(180 45% 42%)", label: "Fitxer antic 3 (rectangle horitzontal 16:9 amb solapa de nom a dalt-esquerra)", src: "", pos: { x: 28, y: 18, w: 44, h: 48, z: 4 } },
+  file4: { color: "hsl(252 45% 42%)", label: "Fitxer antic 4 (rectangle horitzontal 16:9 amb solapa de nom a dalt-esquerra)", src: "", pos: { x: 27, y: 24, w: 46, h: 50, z: 5 } },
+  file5: { color: "hsl(324 45% 42%)", label: "Fitxer antic 5 (rectangle horitzontal 16:9 amb solapa de nom a dalt-esquerra)", src: "", pos: { x: 26, y: 30, w: 48, h: 52, z: 6 } },
+  anim1: { color: "#333333", label: "Vídeo de l'animació personal 1", video: "", pos: { x: 31.2, y: 10.8, w: 37.6, h: 37.6, z: 2 } },
+  anim2: { color: "#333333", label: "Vídeo de l'animació personal 2", video: "", pos: { x: 30.3, y: 17.1, w: 39.5, h: 39.5, z: 3 } },
+  anim3: { color: "#333333", label: "Vídeo de l'animació personal 3", video: "", pos: { x: 29.3, y: 23.3, w: 41.4, h: 41.4, z: 4 } },
+  anim4: { color: "#333333", label: "Vídeo de l'animació personal 4", video: "", pos: { x: 28.4, y: 29.5, w: 43.2, h: 43.2, z: 5 } },
+  anim5: { color: "#333333", label: "Vídeo de l'animació personal 5", video: "", pos: { x: 27.4, y: 35.7, w: 45.1, h: 45.1, z: 6 } },
+  drawerFront: { color: "#7d5233", label: "Frontal del calaix amb tirador (tapa la part baixa dels fitxers)", src: "", pos: { x: 0, y: 62, w: 100, h: 38, z: 20 } },
+  workshopBg: { color: "#44505a", label: "Fons general del taller mecànic (paret, banc de treball, eines i peces decoratives)", src: "", pos: { x: 0, y: 0, w: 100, h: 100, z: 1 } },
+  boardRigs: { color: "#27403a", label: "Pissarra gran «Rigs»", src: "", pos: { x: 4, y: 12, w: 44, h: 58, z: 2 } },
+  boardTools: { color: "#3a3a5c", label: "Pissarra gran «Anim Tools»", src: "", pos: { x: 52, y: 12, w: 44, h: 58, z: 2 } },
+  // ABOUT i CONTACT (pendents de redissenyar)
+  aboutPuppeteer: { color: "#7b4d8f", label: "Mariona as puppeteer (workshop)", src: "" },
+  aboutPhoto:     { color: "#c9774d", label: "Photo poster", src: "" },
+  aboutBio:       { color: "#4c8c8a", label: "Bio poster", src: "" },
+  aboutExp:       { color: "#a3a33a", label: "Experience poster", src: "" },
+  aboutSkills:    { color: "#b0507a", label: "Skills poster", src: "" },
+  door:           { color: "#5b3a24", label: "Workshop door (amb cartell OPEN to work dibuixat)", src: "" },
 };
