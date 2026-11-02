@@ -1,10 +1,32 @@
 import { useEffect, useRef } from "react";
 import { ART } from "./art.js";
 
-export function Art({ id, className = "", style, children }) {
-  const a = ART[id] || { color: "#888", label: id };
+// Resol una entrada d'ART (si té `same`, hereda el dibuix d'una altra)
+export const getArt = (id) => {
+  const b = ART[id] || { color: "#888", label: id };
+  return b.same ? { ...ART[b.same], ...b } : b;
+};
+
+// Estil de posició (en % de l'escena) per a contenidors/botons
+export const place = (id) => {
+  const p = getArt(id).pos;
+  return p ? { position: "absolute", left: `${p.x}%`, top: `${p.y}%`, width: `${p.w}%`, height: `${p.h}%`, zIndex: p.z } : {};
+};
+
+// fill = omple el seu pare (ignora `pos`)
+export function Art({ id, className = "", style, fill, children }) {
+  const a = getArt(id);
+  const media = a.src || a.video;
+  const cls = ["art", fill && "fill", a.ghost && !media && "ghost", a.flip && "flip", className].filter(Boolean).join(" ");
+  const st = {
+    background: media || a.ghost ? undefined : a.color,
+    ...(fill ? null : place(id)),
+    ...(a.opacity != null ? { "--o": a.opacity } : null),
+    ...(a.blend ? { mixBlendMode: a.blend } : null),
+    ...style,
+  };
   return (
-    <div className={"art " + className} style={{ background: a.src || a.video ? undefined : a.color, ...style }}>
+    <div className={cls} style={st}>
       {a.video ? <video src={a.video} autoPlay muted loop playsInline /> :
        a.src ? <img src={a.src} alt={a.alt || ""} draggable="false" /> :
        <span className="art-label">{a.label}</span>}

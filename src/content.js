@@ -22,8 +22,10 @@ export const PROJECTS = Array.from({ length: 6 }, (_, i) => ({
   text: "Coming soon.",
 }));
 
+// file = dibuix del fitxer; anim = vídeo de l'animació
 export const PAPERS = Array.from({ length: 5 }, (_, i) => ({
-  id: `anim${i + 1}`,
+  id: `file${i + 1}`,
+  anim: `anim${i + 1}`,
   title: `Personal piece ${i + 1}`,
 }));
 

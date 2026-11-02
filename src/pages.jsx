@@ -1,44 +1,63 @@
 import { useEffect, useRef, useState } from "react";
-import { Art, Modal, useTitle } from "./ui.jsx";
-import { ART } from "./art.js";
+import { Art, Modal, useTitle, place, getArt } from "./ui.jsx";
 import { CONFIG, PROJECTS, PAPERS, BOARDS } from "./content.js";
 
 /* ---------------- HOME ---------------- */
+let opened = false; // les cortines només s'obren la primera vegada que es carrega la web
+
 export function Home() {
   useTitle("Home");
   const [lit, setLit] = useState(false);
+  const [opening] = useState(() => { const o = !opened; opened = true; return o; });
   useEffect(() => {
     const k = (e) => e.key === "Escape" && setLit(false);
     window.addEventListener("keydown", k);
     return () => window.removeEventListener("keydown", k);
   }, []);
   return (
-    <main className="home">
+    <main className="fit">
       <h1 className="sr">Mariona Molera — Animation and rigging</h1>
-      <div className={"stage" + (lit ? " lit" : "")}>
-        <Art id="homeBg" className="fill" />
-        <Art id="homeAnim" className="anim" />
-        <div className="spot" aria-hidden="true" />
-        <section className="reel" inert={!lit} aria-label="Showreel">
+      <div className={"scene stage" + (lit ? " lit" : "") + (opening ? " opening" : "")}>
+        {/* fons */}
+        <Art id="stageBg" />
+        <Art id="garlandBack" />
+        <Art id="homeAnim" />
+
+        {/* cartell de la showreel (cau en encendre) */}
+        <section className="reel" style={place("reelBoard")} inert={!lit} aria-label="Showreel">
+          <Art id="reelRopes" className="ropes" fill />
           <div className="reel-frame">
             {lit && <iframe title="Mariona Molera showreel" allowFullScreen
               src={`https://www.youtube-nocookie.com/embed/${CONFIG.showreelId}?autoplay=1&rel=0`}
               allow="autoplay; encrypted-media; picture-in-picture" />}
           </div>
+          <Art id="reelBoard" fill />
         </section>
+
+        {/* il·luminació */}
+        <Art id="lightIdle" className="idle" />
+        <Art id="lampsOff" className="idle" />
+        <Art id="lampsOn" className="on flicker" />
+        <Art id="beamL" className="on" />
+        <Art id="beamR" className="on" />
+        <Art id="lightLit" className="on" />
+
+        {/* decoració exterior */}
         <Art id="curtainL" className="curtain l" />
         <Art id="curtainR" className="curtain r" />
-        <Art id="floor" className="floor" />
-        <button className="lever-btn" aria-pressed={lit} onClick={() => setLit(!lit)}>
-          <Art id="lever" className="lever-art" />
-          <span className="plank">Showreel</span>
+        <Art id="valance" />
+        <Art id="proscenium" />
+        <Art id="garlandFront" />
+        <Art id="garlandGlow" className="on" />
+
+        {/* primer pla: palanca (per sota) + màquina */}
+        <Art id="lever" className="lever-art" />
+        <Art id="machineBody" />
+        <Art id="machineGlow" className="on" />
+        <button className="lever-hit" aria-pressed={lit} onClick={() => setLit(!lit)}>
+          <span className="sr">Showreel</span>
         </button>
       </div>
-      <nav className="posters" aria-label="Contact links">
-        <a href={CONFIG.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Art id="posterLinkedin" /></a>
-        <a href={`mailto:${CONFIG.email}`} aria-label="Email"><Art id="posterMail" /></a>
-        <a href={CONFIG.cv} target="_blank" rel="noopener noreferrer" aria-label="CV"><Art id="posterCv" /></a>
-      </nav>
     </main>
   );
 }
@@ -48,13 +67,13 @@ export function Projects() {
   useTitle("Projects");
   const [sel, setSel] = useState(null);
   return (
-    <main className="wrap">
-      <h1>Projects</h1>
-      <p className="lead">The puppet shop. Open a drawer to meet the puppet and the project behind it.</p>
-      <div className="wardrobe">
+    <main className="fit">
+      <h1 className="sr">Projects</h1>
+      <div className="scene">
+        <Art id="projectsBg" />
         {PROJECTS.map((p) => (
-          <button key={p.id} className="drawer" onClick={() => setSel(p)}>
-            <Art id={p.id} />
+          <button key={p.id} className="slot" style={place(p.id)} onClick={() => setSel(p)}>
+            <Art id={p.id} fill />
             <span className="plate">{p.title}</span>
           </button>
         ))}
@@ -67,18 +86,22 @@ export function Projects() {
 }
 
 /* ---------------- ANIMATION ---------------- */
-function Paper({ p, i, onOpen }) {
+// Perspectiva 3D real: tots els fitxers són plans iguals. Els de darrere
+// (k gran) es fan enrere en profunditat, i el navegador els fa petits.
+const ROT = [-1.4, 0.9, -0.7, 1.2, -0.4]; // rotació lleugera, com a fitxers antics
+
+function FileSheet({ f, i, onOpen }) {
   const v = useRef(null);
-  const a = ART[p.id];
+  const anim = getArt(f.anim);
   const play = () => v.current?.play();
   const stop = () => { if (v.current) { v.current.pause(); v.current.currentTime = 0; } };
   return (
-    <button className="paper" style={{ "--tilt": `${(i - 2) * 2}deg` }}
-      onMouseEnter={play} onMouseLeave={stop} onFocus={play} onBlur={stop} onClick={() => onOpen(p)}>
-      {a.video
-        ? <div className="art"><video ref={v} src={a.video} muted loop playsInline preload="metadata" /></div>
-        : <Art id={p.id} />}
-      <span>{p.title}</span>
+    <button className="file" aria-label={f.title}
+      style={{ ...place(f.id), "--k": PAPERS.length - 1 - i, "--rz": `${ROT[i]}deg` }}
+      onMouseEnter={play} onMouseLeave={stop} onFocus={play} onBlur={stop} onClick={() => onOpen(f)}>
+      {anim.video && <span className="win"><video ref={v} src={anim.video} muted loop playsInline preload="metadata" /></span>}
+      <Art id={f.id} fill />
+      <span className="tab-text">{f.title}</span>
     </button>
   );
 }
@@ -86,19 +109,19 @@ function Paper({ p, i, onOpen }) {
 export function Animation() {
   useTitle("Animation");
   const [sel, setSel] = useState(null);
+  const selAnim = sel && getArt(sel.anim);
   return (
-    <main className="wrap">
-      <h1>Animation</h1>
-      <p className="lead">Old projects, kept in a drawer. Hover a paper to see it move, click for the full piece.</p>
-      <div className="drawer-scene">
-        <Art id="animBg" className="fill" />
-        <div className="papers">
-          {PAPERS.map((p, i) => <Paper key={p.id} p={p} i={i} onOpen={setSel} />)}
+    <main className="fit">
+      <h1 className="sr">Animation</h1>
+      <div className="scene">
+        <Art id="drawerBg" />
+        <div className="files3d">
+          {PAPERS.map((f, i) => <FileSheet key={f.id} f={f} i={i} onOpen={setSel} />)}
         </div>
-        <Art id="drawerFront" className="front" />
+        <Art id="drawerFront" />
       </div>
       <Modal open={!!sel} onClose={() => setSel(null)} title={sel?.title} wide>
-        {sel && ART[sel.id].video && <video src={ART[sel.id].video} autoPlay controls playsInline />}
+        {selAnim?.video && <video src={selAnim.video} autoPlay controls playsInline />}
       </Modal>
     </main>
   );
@@ -109,16 +132,16 @@ export function RigTools() {
   useTitle("Rig & Tools");
   const [sel, setSel] = useState(null);
   return (
-    <main className="wrap">
-      <h1>Rig &amp; Tools</h1>
-      <p className="lead">The mechanical workshop, where the puppets are built.</p>
-      <div className="workshop">
-        <Art id="workshopBg" className="fill" />
-        <button className="board b1" onClick={() => setSel("rigs")}><Art id="boardRigs" /><span className="sr">Open Rigs</span></button>
-        <button className="board b2" onClick={() => setSel("tools")}><Art id="boardTools" /><span className="sr">Open Anim Tools</span></button>
-        <Art id="tools" className="prop p1" />
-        <Art id="parts" className="prop p2" />
-        <Art id="blueprints" className="prop p3" />
+    <main className="fit">
+      <h1 className="sr">Rig &amp; Tools</h1>
+      <div className="scene">
+        <Art id="workshopBg" />
+        <button className="board" style={place("boardRigs")} onClick={() => setSel("rigs")}>
+          <Art id="boardRigs" fill /><span className="sr">Open Rigs</span>
+        </button>
+        <button className="board" style={place("boardTools")} onClick={() => setSel("tools")}>
+          <Art id="boardTools" fill /><span className="sr">Open Anim Tools</span>
+        </button>
       </div>
       <Modal open={!!sel} onClose={() => setSel(null)} title={sel && BOARDS[sel].title}>
         <p>{sel && BOARDS[sel].text}</p>
@@ -127,7 +150,7 @@ export function RigTools() {
   );
 }
 
-/* ---------------- ABOUT ---------------- */
+/* ---------------- ABOUT (pendent) ---------------- */
 export function About() {
   useTitle("About");
   return (
@@ -144,14 +167,14 @@ export function About() {
   );
 }
 
-/* ---------------- CONTACT ---------------- */
+/* ---------------- CONTACT (pendent) ---------------- */
 export function Contact() {
   useTitle("Contact");
   return (
     <main className="wrap contact">
       <h1 className="sr">Contact</h1>
       <div className="door">
-        <Art id="door" className="fill" />
+        <Art id="door" fill />
       </div>
       <div className="plaque">
         <h2>Knock knock</h2>
