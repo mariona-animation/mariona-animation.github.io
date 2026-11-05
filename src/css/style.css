@@ -6,6 +6,8 @@
   --hand: "Caveat", "Comic Sans MS", cursive;
   --body: "Karla", system-ui, sans-serif;
   --fw: clamp(14px, 3.2vw, 62px); /* gruix del marc de fusta */
+  --nav-w: clamp(48px, 7.8vw, 150px);   /* cartell de menú: 300×164 px a ×2 */
+  --poster-w: clamp(64px, 7.2vw, 150px); /* pòster: 3:4 */
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
