@@ -1,0 +1,8 @@
+/* Responsive i preferències d'accessibilitat */
+@media (max-width: 720px) {
+  .brand { display: none; }
+  .about { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation: none !important; transition-duration: .01s !important; transition-delay: 0s !important; }
+}

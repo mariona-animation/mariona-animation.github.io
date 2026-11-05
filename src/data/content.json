@@ -1,0 +1,111 @@
+{
+ "BOARDS": {
+  "rigs": {
+   "title": "Rigs",
+   "text": "Coming soon: the rigging work, character by character."
+  },
+  "tools": {
+   "title": "Anim Tools",
+   "text": "Coming soon: the tools built to speed up animation."
+  }
+ },
+ "CONFIG": {
+  "name": "Mariona Molera",
+  "openToWork": true,
+  "email": "mariona.animation@gmail.com",
+  "linkedin": "https://www.linkedin.com/in/mariona-molera",
+  "cv": "https://canva.link/zunpbl0tav8vkty",
+  "showreelId": "eb_JSiHpqLQ"
+ },
+ "NAV": [
+  {
+   "to": "/",
+   "label": "Home",
+   "art": "navHome"
+  },
+  {
+   "to": "/projects",
+   "label": "Projects",
+   "art": "navProjects"
+  },
+  {
+   "to": "/animation",
+   "label": "Animation",
+   "art": "navAnimation"
+  },
+  {
+   "to": "/rig-tools",
+   "label": "Rig & Tools",
+   "art": "navRig"
+  },
+  {
+   "to": "/about",
+   "label": "About",
+   "art": "navAbout"
+  },
+  {
+   "to": "/contact",
+   "label": "Contact",
+   "art": "navContact"
+  }
+ ],
+ "PAPERS": [
+  {
+   "id": "file1",
+   "anim": "anim1",
+   "title": "Personal piece 1"
+  },
+  {
+   "id": "file2",
+   "anim": "anim2",
+   "title": "Personal piece 2"
+  },
+  {
+   "id": "file3",
+   "anim": "anim3",
+   "title": "Personal piece 3"
+  },
+  {
+   "id": "file4",
+   "anim": "anim4",
+   "title": "Personal piece 4"
+  },
+  {
+   "id": "file5",
+   "anim": "anim5",
+   "title": "Personal piece 5"
+  }
+ ],
+ "PROJECTS": [
+  {
+   "id": "puppet1",
+   "title": "Project 1",
+   "text": "Coming soon."
+  },
+  {
+   "id": "puppet2",
+   "title": "Project 2",
+   "text": "Coming soon."
+  },
+  {
+   "id": "puppet3",
+   "title": "Project 3",
+   "text": "Coming soon."
+  },
+  {
+   "id": "puppet4",
+   "title": "Project 4",
+   "text": "Coming soon."
+  },
+  {
+   "id": "puppet5",
+   "title": "Project 5",
+   "text": "Coming soon."
+  },
+  {
+   "id": "puppet6",
+   "title": "Project 6",
+   "text": "Coming soon."
+  }
+ ]
+}

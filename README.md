@@ -1,28 +1,25 @@
-# Mariona Molera — web (React + Vite)
+# Mariona Molera — web
 
-Web del taller de titelles. Sis pàgines: Home, Projects, Animation, Rig & Tools, About, Contact.
+Web estàtica (HTML + CSS + JS natiu, sense dependències ni build) publicable tal qual a GitHub Pages, també en subdirectoris: totes les rutes són relatives i la navegació usa `#/pàgina`.
 
-## Posar-la en marxa
 ```
-npm install
-npm run dev        # desenvolupament
-npm run build      # genera dist/
+index.html
+src/
+  css/   style.css (base, marc, escenes) · components.css · responsive.css
+  js/    main.js (pàgines i router) · components.js (dibuixos, modal, helpers)
+  data/  art.json (dibuixos: posició, capa, mode…) · content.json (textos i enllaços)
+  img/   icons/ (cartells del menú) · logos/ (pòsters) · illustrations/<pàgina>/ · diagrams/
+  video/ vídeos (MP4)
+tools/   generate_placeholders.py — regenera els placeholders des de dibuixos_web.xlsx
 ```
 
-## Substituir els placeholders per dibuixos
-Tot són marcs de color sòlid definits a `src/art.js`.
-1. Copia el PNG a `public/assets/` (p. ex. `curtain-left.png`).
-2. A `src/art.js` afegeix `src: "/assets/curtain-left.png"` a l'entrada corresponent.
-3. Per a vídeos (MP4 o WebM, millor que MOV) fes servir `video: "/assets/loquesigui.mp4"`.
-Si l'entrada té `src`, el color i l'etiqueta desapareixen sols.
+## Executar en local
+Cal servir la carpeta per HTTP (els mòduls i els JSON no funcionen amb `file://`):
+`python3 -m http.server` i obrir http://localhost:8000
 
-Els textos i enllaços (correu, LinkedIn, CV, ID del YouTube, "OPEN to work") són a `src/content.js`.
+## Substituir un placeholder per un dibuix definitiu
+Sobreescriu el fitxer amb el mateix nom i mida (veure l'Excel). Si canvies la ruta, edita `src/data/art.json`.
+Textos, correu, LinkedIn, CV i ID de YouTube: `src/data/content.json`.
 
-## Publicar a GitHub Pages amb domini propi
-1. Puja el projecte a GitHub (branca `main`).
-2. Settings → Pages → Source: **GitHub Actions**.
-3. Crea `public/CNAME` amb una sola línia: el teu domini (p. ex. `marionamolera.com`).
-4. Al proveïdor del domini, apunta el DNS a GitHub Pages (registres A/CNAME segons la guia de GitHub: "Configuring a custom domain for your GitHub Pages site").
-5. A Settings → Pages marca "Enforce HTTPS".
-
-`npm run build` copia `index.html` a `404.html` perquè les rutes (`/projects`, etc.) funcionin en recarregar.
+## Domini propi (quan toqui)
+Crea un fitxer `CNAME` a l'arrel amb el domini i configura Pages (Settings → Pages).
